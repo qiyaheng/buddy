@@ -1,0 +1,14 @@
+node_modules/
+out/
+dist/
+release/
+resources/
+.data/
+backend/.venv/
+backend/build/
+**/__pycache__/
+.pytest_cache/
+*.pyc
+backend/.pytest_cache/
+.DS_Store
+Thumbs.db

@@ -1,0 +1,39 @@
+appId: cn.smebuddy.clone.desktop
+productName: SMEbuddyClone
+copyright: Copyright © 2026
+
+directories:
+  output: release
+  buildResources: resources
+
+files:
+  - out/**/*
+  - package.json
+
+extraResources:
+  - from: resources/backend
+    to: backend
+    filter: ['**/*']
+
+win:
+  target:
+    - target: nsis
+      arch: [x64]
+  artifactName: ${productName}-${version}-setup.${ext}
+
+nsis:
+  oneClick: false
+  perMachine: false
+  allowToChangeInstallationDirectory: true
+  createDesktopShortcut: true
+  createStartMenuShortcut: true
+
+mac:
+  # 在 macOS 上执行 npm run package:mac 生成；默认按本机架构（Intel=x64 / Apple Silicon=arm64）
+  target:
+    - dmg
+    - zip
+  category: public.app-category.productivity
+  artifactName: ${productName}-${version}-${arch}.${ext}
+
+afterPack: scripts/after-pack.mjs
