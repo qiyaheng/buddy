@@ -1,7 +1,0 @@
-Requirement already satisfied: pyinstaller in d:\aiproject\jobtwo\work_buddy\backend\.venv\lib\site-packages (6.22.3)
-Requirement already satisfied: altgraph in d:\aiproject\jobtwo\work_buddy\backend\.venv\lib\site-packages (from pyinstaller) (0.17.5)
-Requirement already satisfied: packaging>=22.0 in d:\aiproject\jobtwo\work_buddy\backend\.venv\lib\site-packages (from pyinstaller) (26.3)
-Requirement already satisfied: pefile>=2022.5.30 in d:\aiproject\jobtwo\work_buddy\backend\.venv\lib\site-packages (from pyinstaller) (2024.8.26)
-Requirement already satisfied: pyinstaller-hooks-contrib>=2026.7 in d:\aiproject\jobtwo\work_buddy\backend\.venv\lib\site-packages (from pyinstaller) (2026.7)
-Requirement already satisfied: pywin32-ctypes>=0.2.1 in d:\aiproject\jobtwo\work_buddy\backend\.venv\lib\site-packages (from pyinstaller) (0.2.3)
-Requirement already satisfied: setuptools>=42.0.0 in d:\aiproject\jobtwo\work_buddy\backend\.venv\lib\site-packages (from pyinstaller) (84.0.0)
