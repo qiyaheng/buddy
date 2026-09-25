@@ -53,7 +53,7 @@ run(
     'trafilatura',
     '--collect-submodules',
     'duckduckgo_search',
-    'app/main.py',
+    'entry.py',
   ],
   { cwd: backendDir },
 )
