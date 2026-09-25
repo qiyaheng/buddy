@@ -40,8 +40,11 @@ interface ChatState {
   pendingExpert: PendingExpert | null
   /** 随预选专家一并带入、到达空白页即自动发送的开场问题。 */
   pendingPrompt: string | null
+  /** 当前会话选中的 ModelConfig 主键；null = 跟随任务绑定或全局默认。 */
+  selectedModelId: string | null
 
   setDraft: (text: string) => void
+  setSelectedModelId: (id: string | null) => void
   startBlank: () => void
   /** 专家广场入口：预选专家并可附带开场问题。 */
   setPendingStart: (expert: PendingExpert, prompt?: string | null) => void
@@ -175,8 +178,10 @@ export const useChatStore = create<ChatState>((set, get) => ({
   abortController: null,
   pendingExpert: null,
   pendingPrompt: null,
+  selectedModelId: null,
 
   setDraft: (text) => set({ draft: text }),
+  setSelectedModelId: (id) => set({ selectedModelId: id }),
   clearNotice: () => set({ notice: null }),
 
   setPendingStart: (expert, prompt = null) =>
@@ -192,6 +197,7 @@ export const useChatStore = create<ChatState>((set, get) => ({
       running: false,
       notice: null,
       usage: null,
+      selectedModelId: null,
       // pendingExpert/pendingPrompt 由专家广场注入，startBlank 不可清掉
       sessionSeq: s.sessionSeq + 1,
     })),
@@ -220,6 +226,7 @@ export const useChatStore = create<ChatState>((set, get) => ({
       if (get().sessionSeq !== seq) return
       set({
         task,
+        selectedModelId: task.model_id,
         messages: rawMessages.map((m) => ({
           id: m.id,
           role: m.role,
@@ -249,6 +256,7 @@ export const useChatStore = create<ChatState>((set, get) => ({
 
     let { taskId } = get()
     const expertId = options?.expertId ?? get().pendingExpert?.id
+    const modelConfigId = get().selectedModelId
     set({ notice: null, draft: '', running: true })
     const seq = get().sessionSeq
     const controller = new AbortController()
@@ -261,6 +269,7 @@ export const useChatStore = create<ChatState>((set, get) => ({
         const task = await http.post<TaskSummary>('/api/tasks', {
           title,
           ...(expertId ? { expert_id: expertId } : {}),
+          ...(modelConfigId ? { model_config_id: modelConfigId } : {}),
         })
         if (get().sessionSeq !== seq) return
         taskId = task.id
@@ -279,7 +288,7 @@ export const useChatStore = create<ChatState>((set, get) => ({
       let finalUsage: UsageTally | null = null
 
       await streamPost(`/api/tasks/${taskId}/runs`, {
-        body: { content: text },
+        body: { content: text, ...(modelConfigId ? { model_config_id: modelConfigId } : {}) },
         signal: controller.signal,
         onEvent: (raw) => {
           if (get().sessionSeq !== seq) return

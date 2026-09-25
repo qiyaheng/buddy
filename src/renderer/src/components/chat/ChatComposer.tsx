@@ -1,16 +1,28 @@
 import {
+  CheckOutlined,
+  DownOutlined,
   PaperClipOutlined,
   SendOutlined,
   StopOutlined,
   ThunderboltOutlined,
 } from '@ant-design/icons'
-import { Tooltip } from 'antd'
+import { Dropdown, Tooltip } from 'antd'
 import { useEffect, useLayoutEffect, useRef } from 'react'
+
+export interface ModelOption {
+  /** ModelConfig 主键 */
+  id: string
+  displayName: string
+  providerName: string
+}
 
 interface Props {
   draft: string
   running: boolean
   modelName: string | null
+  models: ModelOption[]
+  selectedModelId: string | null
+  onSelectModel: (id: string | null) => void
   onChange: (text: string) => void
   onSend: () => void
   onStop: () => void
@@ -22,6 +34,9 @@ export default function ChatComposer({
   draft,
   running,
   modelName,
+  models,
+  selectedModelId,
+  onSelectModel,
   onChange,
   onSend,
   onStop,
@@ -74,12 +89,31 @@ export default function ChatComposer({
                 <span>附件</span>
               </button>
             </Tooltip>
-            <Tooltip title="模型切换将在后续版本开放" placement="top">
-              <button type="button" className="composer-chip" disabled>
+            <Dropdown
+              trigger={['click']}
+              disabled={running || models.length === 0}
+              menu={{
+                selectable: true,
+                selectedKeys: selectedModelId ? [selectedModelId] : [],
+                items: models.map((m) => ({
+                  key: m.id,
+                  icon: selectedModelId === m.id ? <CheckOutlined /> : undefined,
+                  label: (
+                    <span>
+                      {m.displayName}
+                      <span className="model-option-provider"> · {m.providerName}</span>
+                    </span>
+                  ),
+                })),
+                onClick: ({ key }) => onSelectModel(key),
+              }}
+            >
+              <button type="button" className="composer-chip" disabled={running}>
                 <ThunderboltOutlined />
                 <span>{modelName ?? '默认模型'}</span>
+                <DownOutlined style={{ fontSize: 10 }} />
               </button>
-            </Tooltip>
+            </Dropdown>
           </div>
           {running ? (
             <button type="button" className="composer-stop" onClick={onStop}>

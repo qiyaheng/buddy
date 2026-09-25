@@ -1,13 +1,15 @@
 import { ArrowRightOutlined, CloseCircleFilled } from '@ant-design/icons'
 import { Alert, Button } from 'antd'
-import { useEffect } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import ChatComposer from '../components/chat/ChatComposer'
+import ChatComposer, { type ModelOption } from '../components/chat/ChatComposer'
 import ChatHeader from '../components/chat/ChatHeader'
 import ChatWelcome from '../components/chat/ChatWelcome'
 import MessageList from '../components/chat/MessageList'
+import { http } from '../lib/http'
 import { useAppStore } from '../stores/app-store'
 import { useChatStore } from '../stores/chat-store'
+import type { Provider } from '../types/api'
 
 function SetupGuide() {
   const navigate = useNavigate()
@@ -43,7 +45,9 @@ export default function ChatPage() {
     draft,
     notice,
     usage,
+    selectedModelId,
     setDraft,
+    setSelectedModelId,
     startBlank,
     loadTask,
     send,
@@ -53,12 +57,43 @@ export default function ChatPage() {
     clearNotice,
   } = useChatStore()
 
+  const [models, setModels] = useState<ModelOption[]>([])
+
+  useEffect(() => {
+    if (!hasModels) return
+    http
+      .get<Provider[]>('/api/providers')
+      .then((providers) => {
+        setModels(
+          providers
+            .filter((p) => p.enabled)
+            .flatMap((p) =>
+              p.models.map((m) => ({
+                id: m.id,
+                displayName: m.display_name,
+                providerName: p.name,
+              })),
+            ),
+        )
+      })
+      .catch(() => setModels([]))
+  }, [hasModels])
+
   useEffect(() => {
     if (taskId) void loadTask(taskId)
     else startBlank()
     // 仅随路由任务切换触发
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [taskId])
+
+  // chip 上展示的模型名：选中模型 > 任务绑定模型 > 全局默认
+  const currentModelName = useMemo(() => {
+    if (selectedModelId) {
+      const m = models.find((x) => x.id === selectedModelId)
+      if (m) return m.displayName
+    }
+    return task?.model_snapshot?.display_name ?? defaultModelName
+  }, [selectedModelId, models, task, defaultModelName])
 
   if (!hasModels) return <SetupGuide />
 
@@ -103,7 +138,10 @@ export default function ChatPage() {
       <ChatComposer
         draft={draft}
         running={running}
-        modelName={defaultModelName}
+        modelName={currentModelName}
+        models={models}
+        selectedModelId={selectedModelId}
+        onSelectModel={setSelectedModelId}
         onChange={setDraft}
         onSend={() => void send(draft, navigate)}
         onStop={() => void stop()}
