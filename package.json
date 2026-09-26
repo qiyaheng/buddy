@@ -1,6 +1,6 @@
 {
   "name": "smebuddy-clone",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "private": true,
   "description": "AI 智能体桌面工作台（SMEbuddy 风格）",
   "main": "out/main/index.js",

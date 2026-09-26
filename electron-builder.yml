@@ -20,6 +20,8 @@ win:
     - target: nsis
       arch: [x64]
   artifactName: ${productName}-${version}-setup.${ext}
+  # 跳过对主程序的 rcedit 改写与签名；配合 afterPack 覆盖为原版 electron，避免 Smart App Control 拦截
+  signAndEditExecutable: false
 
 nsis:
   oneClick: false

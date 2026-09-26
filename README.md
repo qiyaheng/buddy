@@ -16,9 +16,9 @@
 
 | 平台 | 下载地址 | 说明 |
 |------|----------|------|
-| **Windows (x64)** | [SMEbuddyClone-0.1.5-setup.exe](https://github.com/qiyaheng/buddy/releases/latest/download/SMEbuddyClone-0.1.5-setup.exe) | NSIS 安装程序，双击安装，可自选安装目录 |
-| **macOS (Apple Silicon)** | [SMEbuddyClone-0.1.5-arm64.dmg](https://github.com/qiyaheng/buddy/releases/latest/download/SMEbuddyClone-0.1.5-arm64.dmg) | DMG 安装镜像，拖入「应用程序」即可 |
-| **macOS (zip 备用)** | [SMEbuddyClone-0.1.5-arm64.zip](https://github.com/qiyaheng/buddy/releases/latest/download/SMEbuddyClone-0.1.5-arm64.zip) | zip 压缩包，解压后运行 |
+| **Windows (x64)** | [SMEbuddyClone-0.1.6-setup.exe](https://github.com/qiyaheng/buddy/releases/latest/download/SMEbuddyClone-0.1.6-setup.exe) | NSIS 安装程序，双击安装，可自选安装目录 |
+| **macOS (Apple Silicon)** | [SMEbuddyClone-0.1.6-arm64.dmg](https://github.com/qiyaheng/buddy/releases/latest/download/SMEbuddyClone-0.1.6-arm64.dmg) | DMG 安装镜像，拖入「应用程序」即可 |
+| **macOS (zip 备用)** | [SMEbuddyClone-0.1.6-arm64.zip](https://github.com/qiyaheng/buddy/releases/latest/download/SMEbuddyClone-0.1.6-arm64.zip) | zip 压缩包，解压后运行 |
 
 也可以到 [Releases 页面](https://github.com/qiyaheng/buddy/releases) 查看所有版本与产物。
 
