@@ -57,7 +57,11 @@ def resolve_model(db: Session, provider_id: str, model_id: str | None) -> ModelC
     if provider is None:
         raise NotFoundError("模型服务商不存在")
     if model_id:
-        model = db.query(ModelConfig).filter_by(provider_id=provider_id, id=model_id).first()
+        model = (
+            db.query(ModelConfig)
+            .filter_by(provider_id=provider_id, model_id=model_id)
+            .first()
+        )
     else:
         model = (
             db.query(ModelConfig)
