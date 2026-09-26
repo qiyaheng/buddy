@@ -27,7 +27,9 @@ function run(cmd, args, options = {}) {
   if (result.status !== 0) process.exit(result.status ?? 1)
 }
 
-run(venvPython, ['-m', 'pip', 'install', '--disable-pip-version-check', 'pyinstaller>=6.0'])
+// Windows 下 shell:true 会原样拼接参数，>= 中的 > 会被 cmd 当成重定向符（产生杂散文件 6.0），需加引号
+const pyinstallerSpec = isWin ? '"pyinstaller>=6.0"' : 'pyinstaller>=6.0'
+run(venvPython, ['-m', 'pip', 'install', '--disable-pip-version-check', pyinstallerSpec])
 
 // 清理旧产物
 rmSync(join(backendDir, 'build'), { recursive: true, force: true })
