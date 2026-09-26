@@ -45,6 +45,9 @@ run(
     '--onefile',
     '--name',
     'backend',
+    // Windows 单文件模式默认解压到 %TEMP%，Smart App Control 会拦截从 Temp 加载的 DLL（如 sqlalchemy _result_cy），
+    // 改为解压到 exe 同级的 .runtime 目录以避开该路径规则。仅 Windows；macOS 解压在 .app 内会破坏签名
+    ...(isWin ? ['--runtime-tmpdir', '.runtime'] : []),
     '--distpath',
     join('..', 'resources', 'backend'),
     '--workpath',
